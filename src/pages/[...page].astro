@@ -1,0 +1,51 @@
+---
+import ExternalLink from "@components/MarkdownComponents/ExternalLink.astro";
+import { defaultLocale } from "@config/siteSettings.json";
+import { filterCollectionByLanguage } from "@js/localeUtils";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { type InferGetStaticPropsType } from "astro";
+import { type CollectionEntry, getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+	const otherPages: CollectionEntry<"otherPages">[] = await getCollection(
+		"otherPages",
+		({ data }) => {
+			// filter out draft pages
+			return data.draft !== true;
+		},
+	);
+
+	// get rid of pages from other languages and remove locale from slug
+	const filteredPages = filterCollectionByLanguage(
+		otherPages,
+		defaultLocale,
+	) as CollectionEntry<"otherPages">[];
+
+	return filteredPages.map((page) => ({
+		params: { page: page.id },
+		props: page,
+	}));
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const page = Astro.props as Props;
+
+// convert markdown to html
+const { Content } = await render(page);
+const { title, description } = page.data;
+---
+
+<BaseLayout title={title} description={description}>
+	<section class="pt-20">
+		<div class="bg-accent py-2 text-center">
+			<div class="border-base-50 bg-accent border-y-2 py-16 md:py-28">
+				<h1 class="h1">{title}</h1>
+			</div>
+		</div>
+		<div class="mx-auto max-w-3xl">
+			<div class="text-base-content markdown-content mt-10 max-w-none text-sm md:text-base">
+				<Content components={{ a: ExternalLink }} />
+			</div>
+		</div>
+	</section>
+</BaseLayout>

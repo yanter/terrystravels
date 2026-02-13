@@ -1,0 +1,64 @@
+---
+/**
+ * * Bigger newsletter form component. Used in `src/components/Cta/NewsletterLarge.astro`.
+ */
+
+import Button from "@components/Button/Button.astro";
+
+interface Props {
+	name: string; // name for your form, like "hero-newsletter". It is used for the various id's
+	class?: string; // classes for the form
+	rest?: any; // catch-all for any additional parameters, such as "aria-label"
+}
+
+const { name, class: classList, ...rest } = Astro.props as Props;
+---
+
+<form
+	id={`${name}-form`}
+	name={`${name}-form`}
+	class:list={["mt-4 flex flex-col gap-3", classList]}
+	{...rest}
+>
+	<div>
+		<div class="grid gap-3 sm:grid-cols-2">
+			<div class="flex flex-col">
+				<label for={`${name}-fname`} class="sr-only">First Name</label>
+				<input
+					type="text"
+					class="form__input"
+					name="fname"
+					pattern="[A-Za-z]+"
+					id={`${name}-fname`}
+					placeholder="First name"
+				/>
+			</div>
+
+			<div class="flex flex-col">
+				<label for={`${name}-lname`} class="sr-only">Last Name</label>
+				<input
+					type="text"
+					class="form__input"
+					name="lname"
+					pattern="[A-Za-z]+"
+					id={`${name}-lname`}
+					placeholder="Last name"
+				/>
+			</div>
+		</div>
+	</div>
+	<div>
+		<label for={`${name}-email`} class="sr-only">*Email</label>
+		<input
+			type="email"
+			class="form__input"
+			name="email"
+			id={`${name}-email`}
+			inputmode="email"
+			placeholder="Email"
+			required
+		/>
+	</div>
+
+	<Button variant="primary" type="submit" class="text-nowrap">Sign me up!</Button>
+</form>

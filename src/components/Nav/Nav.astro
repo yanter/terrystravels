@@ -1,0 +1,112 @@
+---
+import Button from "@components/Button/Button.astro";
+import LanguageSelect from "@components/LanguageSelect/LanguageSelect.astro";
+import MobileNav from "@components/Nav/MobileNav/MobileNav.astro";
+import NavDropdown from "@components/Nav/NavDropdown.astro";
+import NavLink from "@components/Nav/NavLink.astro";
+import Search from "@components/Search/Search.astro";
+import SiteLogo from "@components/SiteLogo/SiteLogo.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getTranslatedData } from "@js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const navData = getTranslatedData("navData", currLocale);
+import { locales } from "@config/siteSettings.json";
+// console.log(JSON.stringify(navData, null, 2));
+---
+
+<div
+	id="nav__site-container"
+	class="navbar--initial fixed top-0 left-0 z-30 flex w-full flex-col border-b transition-all duration-500"
+>
+	<div class="mx-auto flex w-full">
+		<div class="site-container flex h-16 w-full items-center">
+			<header class="flex w-full items-center gap-2 lg:grid lg:grid-cols-12">
+				<!-- home button / image -->
+				<div class="flex flex-auto justify-start lg:col-span-2">
+					<SiteLogo />
+				</div>
+
+				<div class="lg:col-span-8">
+					<nav class="hidden lg:block">
+						<ul class="flex h-fit w-full items-center justify-center px-4">
+							{
+								// if dropdown exists, setup the dropdown, otherwise it is just a link
+								navData.map((navItem) =>
+									"dropdown" in navItem ? (
+										// non-mobile dropdown menu
+										<NavDropdown navItem={navItem} />
+									) : (
+										// normal nav link
+										<NavLink {navItem} />
+									),
+								)
+							}
+						</ul>
+					</nav>
+				</div>
+
+				<!-- desktop nav menu -->
+				<div class="flex flex-auto items-center justify-end gap-2 lg:col-span-2">
+					<Search />
+
+					{locales.length > 1 && <LanguageSelect class="hidden lg:block" />}
+
+					<!-- <Button
+            variant="primary"
+            class="my-auto hidden whitespace-nowrap text-sm lg:block"
+            href="https://cosmicthemes.com/themes/dawnlight/"
+          >
+            Get Dawnlight!
+          </Button> -->
+
+					<!-- mobile nav menu, only load on small screens where it is visible -->
+					<div class="lg:hidden">
+						<MobileNav />
+					</div>
+				</div>
+			</header>
+		</div>
+	</div>
+</div>
+
+<style>
+	.navbar--scrolled {
+		background-color: var(--color-base-50);
+		border-bottom-color: var(--color-base-200);
+	}
+
+	.navbar--initial {
+		padding-block: calc(var(--spacing) * 3);
+		border-bottom-color: transparent;
+		background-color: transparent;
+	}
+</style>
+
+<script>
+	let navbar: HTMLElement | null;
+
+	function scrollHandler() {
+		if (navbar) {
+			if (window.scrollY > 50) {
+				// if we have scrolled down the page a bit, change navbar
+				navbar.classList.add("navbar--scrolled");
+				navbar.classList.remove("navbar--initial");
+			} else {
+				navbar.classList.add("navbar--initial");
+				navbar.classList.remove("navbar--scrolled");
+			}
+		}
+	}
+
+	function initNav() {
+		navbar = document.getElementById("nav__site-container");
+		window.addEventListener("scroll", scrollHandler, { passive: true });
+	}
+
+	// runs on initial page load
+	initNav();
+
+	// runs on view transitions navigation. Not needed if item has "transition:persist"
+	document.addEventListener("astro:after-swap", initNav);
+</script>

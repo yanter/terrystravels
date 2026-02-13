@@ -1,0 +1,40 @@
+---
+import Newsletter from "@components/Cta/NewsletterLarge.astro";
+import ExternalLink from "@components/MarkdownComponents/ExternalLink.astro";
+import AboutCard from "@components/SidebarCards/AboutCard.astro";
+import RecentPostsCard from "@components/SidebarCards/RecentPostsCard.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getTranslatedData } from "@js/translationUtils";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { getEntry, render } from "astro:content";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+
+const author = await getEntry("authors", siteData.author.slug);
+
+if (!author) {
+	throw new Error("Author not found in src/pages/about.astro");
+}
+
+const { Content } = await render(author);
+---
+
+<BaseLayout title={siteData.title} description={siteData.description}>
+	<div class="site-container pt-24 pb-10 md:pt-36">
+		<div class="grid gap-10 md:grid-cols-8 lg:grid-cols-11">
+			<div class="col-span-8" data-pagefind-body>
+				<h1 class="h1 text-center">About Me</h1>
+				<section class="markdown-content mt-8 max-w-none">
+					<Content components={{ a: ExternalLink }} />
+				</section>
+			</div>
+
+			<div class="hidden flex-col gap-10 lg:col-span-3 lg:flex">
+				<!-- <AboutCard /> -->
+				<RecentPostsCard />
+			</div>
+		</div>
+	</div>
+	<Newsletter />
+</BaseLayout>

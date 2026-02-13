@@ -1,0 +1,61 @@
+---
+import Button from "@components/Button/Button.astro";
+import Category from "@components/Category/Category.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { categorify, formatDate, humanize, slugify } from "@js/textUtils";
+import { Image } from "astro:assets";
+import { type CollectionEntry } from "astro:content";
+
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+
+interface Props {
+	post: CollectionEntry<"blog">;
+	showDescription?: boolean;
+	class?: string;
+	rest?: any; // catch-all for any additional parameters, such as "aria-label"
+}
+
+const { post, showDescription = false, class: className, ...rest } = Astro.props as Props;
+const { title, description, pubDate, heroImage, categories } = post.data;
+---
+
+<article class=`${className}` {...rest}>
+	<a class="" href={getLocalizedRoute(currLocale, `/blog/${post.id}/`)}>
+		<p class="sr-only">{title}</p>
+		<div class="aspect-[5/4] overflow-hidden rounded-xs">
+			<figure class="h-full">
+				<Image
+					src={heroImage}
+					alt={`cover for ${title}`}
+					width={400}
+					densities={[1, 1.5, 2]}
+					quality="high"
+					class="min-h-full w-full object-cover transition-all duration-1000 will-change-transform hover:scale-[1.02]"
+					transition:name={`blog-image-${post.id}`}
+				/>
+			</figure>
+		</div>
+	</a>
+	<div class="w-full">
+		<!-- title -->
+		<div class="mt-3 px-2">
+			<a
+				href={getLocalizedRoute(currLocale, `/blog/${post.id}/`)}
+				class="hover:text-primary-500 transition duration-300"
+			>
+				<h2 class="text-center font-serif text-lg font-medium text-pretty">
+					{title}
+				</h2>
+			</a>
+		</div>
+
+		<!-- description -->
+		{
+			showDescription && (
+				<p class="description mt-3 text-center text-sm md:text-base">{description}</p>
+			)
+		}
+	</div>
+</article>

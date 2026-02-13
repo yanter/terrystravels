@@ -1,0 +1,62 @@
+---
+/**
+ * * Hero section with left side text and right side image
+ */
+// import heroImage from "@assets/images/business-strategy.png";
+import heroImage from "@assets/images/girl-3.png";
+import Button from "@components/Button/Button.astro";
+import NewsletterForm from "@components/Forms/NewsletterForm.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getTranslatedData, useTranslations } from "@js/translationUtils";
+import { Image } from "astro:assets";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+const t = useTranslations(currLocale);
+---
+
+<section id="hero" class="bg-accent flex min-h-[60svh] w-full py-14 md:pb-22">
+	<!-- hero items -->
+	<div
+		class="site-container mx-auto grid max-w-4xl items-center gap-10 pt-12 pb-6 md:grid-cols-5 md:gap-20 md:py-20"
+	>
+		<!-- Hero text -->
+		<div class="row-start-2 gap-8 text-center md:col-span-3 md:row-start-1 md:text-left">
+			<h1
+				class="font-display-block font-handwriting text-5xl text-nowrap md:text-6xl lg:text-7xl"
+				data-aos="fade-up"
+				data-aos-trigger="#hero"
+			>
+				{siteData.name}
+			</h1>
+			<p
+				class="description mx-auto mt-6 max-w-md text-pretty md:max-w-none"
+				data-aos="fade-up"
+				data-aos-delay="0.2"
+				data-aos-trigger="#hero"
+			>
+				<!-- A beautiful affiliate and blog template with tons of pages and features.
+        Created with Astro, Tailwind CSS, and Keystatic CMS. Check the
+        "overview" page for more details. See this and more themes at <a
+          href="https://cosmicthemes.com"
+          class="underline decoration-primary-400 transition hover:text-primary-400"
+          >cosmicthemes.com</a
+        > -->
+				{t("hero_description")}
+			</p>
+			<NewsletterForm
+				name="hero-newsletter"
+				data-aos="fade-up"
+				data-aos-delay="0.8"
+				data-aos-trigger="#hero"
+			/>
+		</div>
+		<!-- hero image -->
+		<div
+			class="mx-auto aspect-square max-w-[260px] min-w-0 justify-center overflow-hidden rounded-xs md:col-span-2 md:max-w-md md:justify-end"
+			data-aos="fade-in"
+		>
+			<Image src={heroImage} class="max-w-full" alt="hero" loading="eager" width={600} />
+		</div>
+	</div>
+</section>

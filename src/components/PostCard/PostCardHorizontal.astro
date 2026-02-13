@@ -1,0 +1,100 @@
+---
+/**
+ * * Horizontal post cards
+ * Intended for images with an aspect ratio of 16/9
+ */
+import Button from "@components/Button/Button.astro";
+import Category from "@components/Category/Category.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { categorify, formatDate, humanize, slugify } from "@js/textUtils";
+import { Image } from "astro:assets";
+import { type CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+
+interface Props {
+	post: CollectionEntry<"blog">;
+	showDescription?: boolean;
+	class?: string;
+	rest?: any; // catch-all for any additional parameters, such as "aria-label"
+}
+
+const { post, showDescription = false, class: className, ...rest } = Astro.props as Props;
+const { title, description, pubDate, heroImage, categories } = post.data;
+---
+
+<article class=`flex grid gap-4 md:grid-cols-2 md:gap-8 ${className}` {...rest}>
+	<a
+		href={getLocalizedRoute(currLocale, `/blog/${post.id}/`)}
+		class="aspect-video overflow-hidden rounded-xs"
+	>
+		<figure>
+			<Image
+				src={heroImage}
+				alt={`Cover for ${title}`}
+				width={500}
+				densities={[1, 1.5, 2]}
+				quality="high"
+				class="min-h-full w-full rounded-xs object-cover transition-all duration-1000 will-change-transform hover:scale-[1.02]"
+				transition:name={`blog-image-${post.id}`}
+			/>
+		</figure>
+	</a>
+	<div class="flex w-full flex-col gap-2 md:gap-4">
+		<div class="flex w-full flex-wrap gap-2 text-sm md:mt-6">
+			<!-- categories -->
+			<div class="flex items-center gap-3">
+				<div class="flex flex-wrap items-center">
+					{
+						categories.map((category, idx) => {
+							{
+								if (idx > 0) {
+									return (
+										<>
+											<span class="description text-sm">,</span>
+											<Category class="ml-2" category={category} />
+										</>
+									);
+								}
+							}
+							return <Category category={category} />;
+						})
+					}
+				</div>
+			</div>
+
+			<span>&bull;</span>
+
+			<!-- published date -->
+			<div class="description xl:text-sm">
+				<div class="flex">
+					<p class="font-light whitespace-nowrap uppercase">
+						{formatDate(pubDate, currLocale)}
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- title -->
+		<div>
+			<a
+				href={getLocalizedRoute(currLocale, `/blog/${post.id}/`)}
+				class="hover:text-primary-500 transition duration-300"
+			>
+				<h2 class="font-serif text-2xl font-medium md:text-3xl">
+					{title}
+				</h2>
+			</a>
+		</div>
+
+		<!-- description -->
+		{
+			showDescription && (
+				<p class="description hidden text-sm md:block lg:text-base">{description}</p>
+			)
+		}
+	</div>
+</article>

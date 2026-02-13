@@ -1,0 +1,17 @@
+---
+import { getAllPosts } from "@js/blogUtils";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import BlogLayout from "@layouts/BlogLayoutSidebar.astro";
+import { getEntry, render } from "astro:content";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const posts = await getAllPosts(currLocale);
+
+const post = posts[0];
+
+const { Content, headings } = await render(post);
+---
+
+<BlogLayout post={post} headings={headings}>
+	<Content />
+</BlogLayout>

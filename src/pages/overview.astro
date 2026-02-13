@@ -1,0 +1,146 @@
+---
+import Button from "@components/Button/Button.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+
+// styles
+const overview__heading = "mb-2 mt-6 text-lg";
+const overview__link = "font-light leading-tight transition hover:text-primary-500";
+---
+
+<BaseLayout title="Recent Blog Posts" description="Recent Blog Posts Description">
+	<div class="mx-auto max-w-3xl pt-24 md:pt-36">
+		<h1 class="h1 text-center">Overview</h1>
+		<p class="description mt-2 text-center">The various pages of Dawnlight</p>
+		<div class="xs:grid-cols-2 mx-auto mt-10 grid gap-4 text-center md:grid-cols-3">
+			<!-- Blog pages -->
+			<div class="flex flex-col gap-2">
+				<h3 class={overview__heading}>Blog</h3>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/blog")}>Blog Index 1</a>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/examples/blogindex2")}
+					>Blog Index 2</a
+				>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/examples/blog1")}
+					>Blog Post 1</a
+				>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/examples/blog2")}
+					>Blog Post 2</a
+				>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/examples/blog3")}
+					>Blog Post 3</a
+				>
+			</div>
+
+			<!-- Landing pages -->
+			<div class="flex flex-col gap-2">
+				<h3 class={overview__heading}>Blog</h3>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "")}>Landing Page 1</a>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/examples/landing2")}
+					>Landing Page 2</a
+				>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/examples/landing3")}
+					>Landing Page 3</a
+				>
+			</div>
+
+			<!-- Blog Post Cards -->
+			<div class="flex flex-col gap-2">
+				<h3 class={overview__heading}>Blog Post Cards</h3>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/blog")}>Post Card 1</a>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/examples/postcard2")}
+					>Post Card 2</a
+				>
+			</div>
+
+			<!-- Elements and Forms -->
+			<div class="flex flex-col gap-2">
+				<h3 class={overview__heading}>Elements and Forms</h3>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/elements")}
+					>MDX and Keystatic Elements</a
+				>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/contact")}>Contact</a>
+			</div>
+
+			<!-- Widgets -->
+			<div class="flex flex-col gap-2">
+				<h3 class={overview__heading}>Widgets</h3>
+				<button id="test-consent-demo-btn" class={overview__link}>Cookie Consent</button>
+			</div>
+
+			<!-- Other -->
+			<div class="flex flex-col gap-2">
+				<h3 class={overview__heading}>Other Pages</h3>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/categories")}>Categories</a>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/tags")}>Tags</a>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/not-a-link")}>404</a>
+				<a
+					class={overview__link}
+					href={getLocalizedRoute(currLocale, "/rss.xml")}
+					target="_blank"
+					rel="noopener noreferrer">RSS Feed</a
+				>
+				<a class={overview__link} href={getLocalizedRoute(currLocale, "/privacy-policy")}
+					>Privacy Policy</a
+				>
+			</div>
+		</div>
+	</div>
+
+	<div id="test-banner" class="fixed inset-x-6 bottom-6 z-50 hidden justify-center">
+		<div
+			class="border-primary-400 bg-base-100 flex flex-wrap items-center justify-center gap-x-6 gap-y-4 rounded-xs border px-4 py-2"
+		>
+			<div class="text-center">
+				<p class="text-sm lg:text-base">
+					We use cookies to improve your experience on this site. To learn more, see our <a
+						href={getLocalizedRoute(currLocale, "/privacy-policy")}
+						class="text-primary-600 hover:text-primary-400 underline transition">Privacy Policy</a
+					>.
+				</p>
+			</div>
+			<div class="mx-auto flex gap-2">
+				<Button variant="primary" type="button">Accept</Button>
+				<Button variant="ghost" type="button">Decline</Button>
+			</div>
+		</div>
+	</div>
+</BaseLayout>
+
+<script>
+	//Script purely for demo of the CookieConsent component. Use the actual <CookieConsent /> component in BaseLayout.astro if desired.
+	function cookieConsentSetup() {
+		const cookieBanner = document.getElementById("test-banner");
+		const acceptButton = document.querySelector("#test-banner button:first-of-type");
+		const declineButton = document.querySelector("#test-banner button:last-of-type");
+		const cookieConsentDemoBtn = document.getElementById("test-consent-demo-btn");
+
+		cookieConsentDemoBtn?.addEventListener("click", () => {
+			cookieBanner?.classList.toggle("hidden");
+			cookieBanner?.classList.toggle("flex");
+		});
+
+		// If the user clicks the accept button, hide the banner and set a cookie
+		acceptButton?.addEventListener("click", () => {
+			console.log("cookies accepted example");
+			cookieBanner?.classList.toggle("hidden");
+			cookieBanner?.classList.toggle("flex");
+		});
+
+		// If the user clicks the decline button, hide the banner and set a cookie
+		declineButton?.addEventListener("click", () => {
+			console.log("cookies declined example");
+			cookieBanner?.classList.toggle("hidden");
+			cookieBanner?.classList.toggle("flex");
+		});
+	}
+
+	// runs on initial page load
+	cookieConsentSetup();
+
+	// runs on view transitions navigation
+	document.addEventListener("astro:after-swap", cookieConsentSetup);
+</script>

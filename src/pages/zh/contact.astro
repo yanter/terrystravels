@@ -1,0 +1,16 @@
+---
+import ContactForm from "@components/Forms/ContactForm.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Contact Me" description="Get in touch! Contact information for Blogsmith.">
+	<div class="mx-auto max-w-4xl px-4 pt-24 md:pt-36">
+		<h1 class="h1 text-center">Contact Me</h1>
+		<p class="mt-4 text-center text-lg font-light">
+			I'd love to hear from you! Please fill out the form below to get in touch.
+		</p>
+		<div class="mx-auto my-10 max-w-2xl">
+			<ContactForm />
+		</div>
+	</div>
+</BaseLayout>

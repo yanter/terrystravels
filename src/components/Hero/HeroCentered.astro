@@ -1,0 +1,43 @@
+---
+/**
+ * * Centered hero with no images
+ */
+import Button from "@components/Button/Button.astro";
+import NewsletterForm from "@components/Forms/NewsletterForm.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getTranslatedData, useTranslations } from "@js/translationUtils";
+import { Image } from "astro:assets";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+const t = useTranslations(currLocale);
+---
+
+<section id="hero" class="bg-accent min-h-[30rem] w-full py-24 lg:min-h-[34rem]">
+	<div class="site-container flex h-full items-center justify-center">
+		<!-- Hero text -->
+		<div class="max-w-xl py-10 text-center">
+			<h1
+				class="font-display-block font-handwriting text-5xl text-nowrap md:text-6xl lg:text-7xl"
+				data-aos="fade-up"
+				data-aos-trigger="#hero"
+			>
+				{siteData.name}
+			</h1>
+			<p
+				class="description mx-auto mt-6 max-w-none text-pretty"
+				data-aos="fade-up"
+				data-aos-delay="0.2"
+				data-aos-trigger="#hero"
+			>
+				<!-- A beautiful affiliate and blog template with tons of pages and features.
+        Created with Astro, Tailwind CSS, and Keystatic CMS. Check the
+        "overview" page for more details. -->
+				{t("hero_description")}
+			</p>
+			<div class="px-4 sm:px-8" data-aos="fade-up" data-aos-delay="0.6" data-aos-trigger="#hero">
+				<NewsletterForm name="hero-newsletter" />
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,22 @@
+---
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { humanize, slugify, tagify } from "@js/textUtils";
+
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+
+interface Props {
+	tag: string;
+	class?: string;
+}
+
+const { tag, class: className } = Astro.props as Props;
+---
+
+<a
+	href={getLocalizedRoute(currLocale, `/tags/${slugify(tag)}/`)}
+	class={`inline-block uppercase font-light description hover:text-primary-500 ${className}`}
+>
+	{humanize(tag)}
+</a>

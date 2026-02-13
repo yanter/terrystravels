@@ -1,0 +1,60 @@
+---
+import Button from "@components/Button/Button.astro";
+import Newsletter from "@components/Cta/NewsletterLarge.astro";
+import Hero from "@components/Hero/HeroBgImage.astro";
+import PostCardHorizontal from "@components/PostCard/PostCardHorizontal.astro";
+import PostCardVertical from "@components/PostCard/PostCardVertical.astro";
+import AboutCard from "@components/SidebarCards/AboutCard.astro";
+import NewsletterCard from "@components/SidebarCards/NewsletterCard.astro";
+import RecentPostsCard from "@components/SidebarCards/RecentPostsCard.astro";
+import TableOfContentsCard from "@components/SidebarCards/TableOfContentsCard.astro";
+import TagsCard from "@components/SidebarCards/TagsCard.astro";
+import { formatPosts, getAllPosts } from "@js/blogUtils";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getTranslatedData } from "@js/translationUtils";
+import { getLocalizedRoute } from "@js/translationUtils";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+
+const posts = await getAllPosts(currLocale);
+const recentPosts = formatPosts(posts, { limit: 3 });
+---
+
+<BaseLayout title={siteData.title} description={siteData.description}>
+	<Hero />
+	<div class="site-container mt-10 pb-10">
+		<!-- Recent blogs -->
+		<div class="md:mt-12">
+			<!-- <h2 class="h2 text-center">Recent Blog Posts</h2> -->
+			<div class="mt-8 grid gap-10 md:grid-cols-8 lg:grid-cols-11">
+				<div class="flex flex-col gap-10 md:col-span-8">
+					{
+						recentPosts.map((post, idx) => (
+							<PostCardVertical post={post} showDescription={true} data-aos="fade-up" />
+							// <PostCardHorizontal
+							//   post={post}
+							//   showDescription={false}
+							//   data-aos="fade-up"
+							// />
+						))
+					}
+					<!-- link to all posts -->
+					<div class="flex justify-center">
+						<Button variant="ghost" arrow="right" href={getLocalizedRoute(currLocale, "/blog/")}>
+							All Posts
+						</Button>
+					</div>
+				</div>
+
+				<div class="hidden flex-col gap-10 lg:col-span-3 lg:flex">
+					<AboutCard />
+					<TagsCard />
+					<!-- <RecentPostsCard /> -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<Newsletter />
+</BaseLayout>

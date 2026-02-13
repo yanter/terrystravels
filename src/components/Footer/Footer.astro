@@ -1,0 +1,96 @@
+---
+import FooterLink from "@components/Footer/FooterLink.astro";
+import SiteLogo from "@components/SiteLogo/SiteLogo.astro";
+import SocialIcon from "@components/SocialIcon/SocialIcon.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getTranslatedData } from "@js/translationUtils";
+
+import { getLocalizedRoute } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+
+const today = new Date();
+---
+
+<footer class="site-container mt-10 mb-12">
+	<div class="flex w-full flex-col justify-between gap-4 sm:flex-row">
+		<div class="mt-6 flex flex-col items-start gap-4">
+			<SiteLogo />
+
+			<div class="flex gap-2">
+				<SocialIcon
+					href="https://twitter.com/BowTiedWebReapr"
+					icon="tabler/brand-x"
+					social="twitter (x)"
+				/>
+				<SocialIcon
+					href="https://twitter.com/BowTiedWebReapr"
+					icon="tabler/brand-pinterest"
+					social="pinterest"
+				/>
+				<SocialIcon
+					href="https://twitter.com/BowTiedWebReapr"
+					icon="tabler/brand-instagram"
+					social="google"
+				/>
+			</div>
+
+			<div class="hidden w-full text-sm font-light opacity-80 sm:block">
+				&copy; {today.getFullYear()}
+				{" "}{siteData.name}. All rights reserved.
+			</div>
+		</div>
+		<div class="grid grid-cols-2 justify-between gap-4 md:grid-cols-3 md:gap-10">
+			<!-- Navigation -->
+			<div class="flex flex-col">
+				<h3 class="footer__heading">Navigation</h3>
+				<FooterLink href={getLocalizedRoute(currLocale, "/overview")}>Overview</FooterLink>
+				<FooterLink href={getLocalizedRoute(currLocale, "/blog")}>Blog</FooterLink>
+				<FooterLink href={getLocalizedRoute(currLocale, "/categories")}>Categories</FooterLink>
+				<FooterLink href={getLocalizedRoute(currLocale, "/tags")}>Tags</FooterLink>
+				<FooterLink href={getLocalizedRoute(currLocale, "/contact")}>Contact</FooterLink>
+			</div>
+
+			<!-- Legal -->
+			<div class="flex flex-col">
+				<h3 class="footer__heading">Legal</h3>
+				<FooterLink href="https://cosmicthemes.com/license/" newTab={true}> License </FooterLink>
+				<FooterLink href="https://cosmicthemes.com/refund/" newTab={true}>
+					Refund policy
+				</FooterLink>
+				<FooterLink href="https://cosmicthemes.com/terms/" newTab={true}> Terms of use </FooterLink>
+				<FooterLink href="https://cosmicthemes.com/privacy/" newTab={true}>
+					Privacy policy
+				</FooterLink>
+				<FooterLink href="https://cosmicthemes.com/support/" newTab={true}> Support </FooterLink>
+			</div>
+
+			<!-- In the Know -->
+			<div class="flex flex-col">
+				<h3 class="footer__heading">In the Know</h3>
+				<FooterLink href="https://twitter.com/BowTiedWebReapr" newTab={true}>
+					@BowTiedWebReapr
+				</FooterLink>
+				<FooterLink href="https://twitter.com/Cosmic_Themes" newTab={true}>
+					@Cosmic_Themes
+				</FooterLink>
+			</div>
+		</div>
+	</div>
+	<div class="mt-6 text-sm font-light opacity-80 sm:hidden">
+		&copy; {today.getFullYear()}
+		{" "}{siteData.name}. All rights reserved.
+	</div>
+</footer>
+
+<style>
+	.footer__heading {
+		border-color: var(--color-accent);
+		margin-bottom: calc(var(--spacing) * 2);
+		margin-top: calc(var(--spacing) * 6);
+		border-bottom-width: 2px;
+		text-transform: uppercase;
+		border-color: var(--color-accent);
+	}
+</style>
