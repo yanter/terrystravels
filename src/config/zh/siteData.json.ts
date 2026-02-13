@@ -2,16 +2,16 @@ import { type SiteDataProps } from "../types/configDataTypes";
 
 // Update this file with your site specific information
 const siteData: SiteDataProps = {
-	name: "Dawnlight",
+	name: "Terrys Travls",
 	// Your website's title and description (meta fields)
-	title: "Dawnlight | The beautiful affiliate and blog website template by Cosmic Themes.",
+	title: "Terrys Travels - Travel Blog",
 	description:
-		"The beautiful affiliate and blog theme for Astro designed by Cosmic Themes. Everything you need for a stunning blog and affiliate website.",
+		"The beautiful travel blog theme",
 	// Your information!
 	author: {
-		name: "Ashley",
-		email: "creator@cosmicthemes.com",
-		twitter: "Cosmic_Themes",
+		name: "Terry",
+		email: "contact@terrystravels.com",
+		twitter: "Terrys_Travels",
 		slug: "main-author", // this must match an author slug in the authors content collection at src/data/authors/{slug}
 	},
 
