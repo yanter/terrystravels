@@ -46,7 +46,7 @@ export const dataTranslations = {
 export const textTranslations = {
   zh: {
 		hero_description:
-			"Have a beautiful blog and affiliate website running in a snap. Multiple pages and sections, i18n, animations, CMS - all ready to go.",
+			"訂 閱 塔 斯 馬 尼 亞 旅 遊 新 聞",
 		back_to_all_posts: "Back to all posts",
 		related_posts: "You'll also enjoy",
 		share_this_post: "Share with your friends!",
@@ -56,7 +56,7 @@ export const textTranslations = {
 	},
 	en: {
 		hero_description:
-			"Have a beautiful blog and affiliate website running in a snap. Multiple pages and sections, i18n, animations, CMS - all ready to go.",
+			"Sign up for latest Tassie Travel News",
 		back_to_all_posts: "Back to all posts",
 		related_posts: "You'll also enjoy",
 		share_this_post: "Share with your friends!",
